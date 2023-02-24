@@ -1,7 +1,9 @@
+cargo-features = ["edition2021"]
+
 [package]
 name = "zynq-memflow"
 version = "0.1.0"
-edition = "2018"
+edition = "2021"
 repository = "https://github.com/slack2450/zynq-memflow.git"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
