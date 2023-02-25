@@ -1,16 +1,16 @@
-use cloneable_file::CloneableFile;
-use memflow::{prelude::{v1::{Result}}};
+use std::fs::File;
+
+use memflow::{prelude::{v1::{Result}, CloneFile}};
 use memflow::mem::MemoryMap;
 use memflow::connector::FileIoMemory;
 use memflow_win32::win32::Win32Kernel;
 
 use simplelog::{LevelFilter, TermLogger, Config, TerminalMode };
 
-
 fn main() -> Result<()> {
     TermLogger::init(LevelFilter::Trace, Config::default(), TerminalMode::Mixed, simplelog::ColorChoice::Auto).unwrap();
 
-    let file = CloneableFile::open("/dev/ax_dma_0").unwrap();
+    let file = CloneFile::from(File::open("/dev/ax_dma_0").unwrap());
 
     let mut map = MemoryMap::new();
 
