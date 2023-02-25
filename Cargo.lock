@@ -176,6 +176,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "cloneable-file"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a65a2f832606a85d1ae63c167b28378359565f5c6b67793d96597d7e2bccd251"
+
+[[package]]
 name = "coarsetime"
 version = "0.1.23"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1353,6 +1359,7 @@ dependencies = [
 name = "zynq-memflow"
 version = "0.1.0"
 dependencies = [
+ "cloneable-file",
  "memflow",
  "memflow-win32",
  "simplelog",
