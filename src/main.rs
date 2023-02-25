@@ -9,7 +9,7 @@ use simplelog::{LevelFilter, TermLogger, Config, TerminalMode };
 
 fn main() -> Result<()> {
     TermLogger::init(LevelFilter::Trace, Config::default(), TerminalMode::Mixed, simplelog::ColorChoice::Auto).unwrap();
-    
+
     let file = CloneableFile::open("/dev/ax_dma_0").unwrap();
 
     let mut map = MemoryMap::new();
