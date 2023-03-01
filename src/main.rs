@@ -9,7 +9,7 @@ use memflow_win32::win32::Win32Kernel;
 use simplelog::{LevelFilter, TermLogger, Config, TerminalMode };
 
 fn main() -> Result<()> {
-    TermLogger::init(LevelFilter::Trace, Config::default(), TerminalMode::Mixed, simplelog::ColorChoice::Auto).unwrap();
+    TermLogger::init(LevelFilter::Debug, Config::default(), TerminalMode::Mixed, simplelog::ColorChoice::Auto).unwrap();
 
     let file = CloneFile::from(File::open("/dev/ax_dma_0").unwrap());
 
