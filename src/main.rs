@@ -18,13 +18,27 @@ fn main() -> Result<()> {
     map.push_remap(0x0.into(), !0, 0x0.into());
     let connector = FileIoMemory::try_with_reader(file, map)?;
 
-    let mut kernel = Win32Kernel::builder(connector).build().unwrap();
+    let kernel = Win32Kernel::builder(connector).build().unwrap();
 
-    println!("{:?}", kernel);
+    let mut process = kernel.into_process_by_name("flag-bin.exe").unwrap();
 
-    kernel.process_info_list().unwrap().iter().for_each(|p| {
-        println!("{:?}", p);
-    });
+    let module = process.module_by_name("flag-bin.exe").unwrap();
+
+    println!("module: {:#?}", module);
+
+    let target_string = b"There is nothing here!!!!";
+    let replace_string = b"Hello world from memflow!";
+
+    let base = module.base;
+    for i in 0..module.size {
+        let mut buf = vec![0; target_string.len()];
+        process.virt_mem.read_raw_into(base + i, &mut buf).data_part()?;
+        if target_string == buf.as_slice() {
+            println!("found string at {:#x}", base + i);
+            process.virt_mem.write_raw(base + i, replace_string)?;
+            break;
+        }
+    }
 
     return Ok(());
 }
