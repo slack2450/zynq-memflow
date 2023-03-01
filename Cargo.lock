@@ -554,7 +554,7 @@ dependencies = [
 [[package]]
 name = "memflow-win32"
 version = "0.2.0-beta9"
-source = "git+https://github.com/slack2450/memflow-win32#70511cf7218f374d7000d0dd738d54d07f9bb491"
+source = "git+https://github.com/slack2450/memflow-win32?branch=main#70511cf7218f374d7000d0dd738d54d07f9bb491"
 dependencies = [
  "log",
  "memflow",
@@ -570,7 +570,7 @@ dependencies = [
 [[package]]
 name = "memflow-win32-defs"
 version = "0.2.0-beta9"
-source = "git+https://github.com/slack2450/memflow-win32#70511cf7218f374d7000d0dd738d54d07f9bb491"
+source = "git+https://github.com/slack2450/memflow-win32?branch=main#70511cf7218f374d7000d0dd738d54d07f9bb491"
 dependencies = [
  "dirs",
  "indicatif",
