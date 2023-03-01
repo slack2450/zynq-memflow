@@ -22,6 +22,12 @@ fn main() -> Result<()> {
 
     let mut process = kernel.into_process_by_name("csgo.exe").unwrap();
 
+    let modules = process.module_list().unwrap();
+
+    for module in modules {
+        println!("module: {:#?}", module.name);
+    }
+
     let module = process.module_by_name("client_panorama.dll").unwrap();
 
     println!("module: {:#?}", module);

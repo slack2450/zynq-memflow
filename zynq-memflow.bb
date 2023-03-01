@@ -8,10 +8,10 @@ inherit cargo
 # how to get zynq-memflow could be as easy as but default to a git checkout:
 # SRC_URI += "crate://crates.io/zynq-memflow/0.1.0"
 SRC_URI += "git://git@github.com/slack2450/zynq-memflow.git;protocol=ssh;nobranch=1"
-SRCREV = "96349d6c153b5c407a136dd646a7a9deeb3d9838"
+SRCREV = "70841c4a728ce206f9741b928dfb23c737ec41c1"
 S = "${WORKDIR}/git"
 CARGO_SRC_DIR = ""
-PV:append = ".AUTOINC+96349d6c15"
+PV:append = ".AUTOINC+70841c4a72"
 
 # please note if you have entries that do not begin with crate://
 # you must change them to how that package can be fetched
