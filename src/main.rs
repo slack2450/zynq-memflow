@@ -20,15 +20,6 @@ fn main() -> Result<()> {
 
     let kernel = Win32Kernel::builder(connector).build().unwrap();
 
-    while let Ok(line) = get_line() {
-        match line.trim() {
-            "quit" | "q" => break,
-            line => if let Some((buf, t)) = parse_input(line) {
-
-            },
-        }
-    }
-
     let mut process = kernel.into_process_by_name("csgo.exe").unwrap();
 
     let module = process.module_by_name("client_panorama.dll").unwrap();
