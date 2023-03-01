@@ -1,4 +1,5 @@
 use std::fs::File;
+use ::std::ops::Add;
 
 use memflow::prelude::v1::*;
 use memflow::{prelude::{v1::{Result}, CloneFile}};
@@ -32,12 +33,22 @@ fn main() -> Result<()> {
 
     println!("module: {:#?}", module);
 
-    let local_player = process.virt_mem.read_addr64(module.base + 0xDEA964).unwrap();
+    println!("module base: {:#?}", module.base);
 
-    let i_health: Address = local_player + 0x100;
+    let pointer_to_local_player: Address = module.base + 0xDEA964;
+
+    println!("pointer to local player: {:#?}", pointer_to_local_player);
+
+    let local_player: Address = process.virt_mem.read_addr(pointer_to_local_player).unwrap();
+
+    println!("local player: {:#?}", local_player);
+
+    let local_player_health_addr: Address = local_player + 0x100;
+
+    println!("local player health addr: {:#?}", local_player_health_addr);
 
     loop {
-        let health = process.virt_mem.read_raw(i_health, 4);
+        let health = process.virt_mem.read::<u32>(local_player_health_addr).unwrap();
         println!("health: {:#?}", health);
         let buf = &mut String::new();
         std::io::stdin().read_line(buf).unwrap();
