@@ -32,12 +32,15 @@ fn main() -> Result<()> {
 
     println!("module: {:#?}", module);
 
-    let i_health: Address = module.base + 0xDEA964 + 0x100;
+    let local_player = process.virt_mem.read_addr64(module.base + 0xDEA964).unwrap();
+
+    let i_health: Address = local_player + 0x100;
 
     loop {
-        let health = process.read_raw(i_health, 4).unwrap();
+        let health = process.virt_mem.read_raw(i_health, 4);
         println!("health: {:#?}", health);
-        std::io::stdin();
+        let buf = &mut String::new();
+        std::io::stdin().read_line(buf).unwrap();
     }
 
     return Ok(());
