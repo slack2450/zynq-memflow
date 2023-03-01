@@ -1,5 +1,6 @@
 use std::fs::File;
 
+use memflow::prelude::v1::*;
 use memflow::{prelude::{v1::{Result}, CloneFile}};
 use memflow::mem::MemoryMap;
 use memflow::connector::FileIoMemory;
@@ -17,9 +18,13 @@ fn main() -> Result<()> {
     map.push_remap(0x0.into(), !0, 0x0.into());
     let connector = FileIoMemory::try_with_reader(file, map)?;
 
-    let kernel = Win32Kernel::builder(connector).build().unwrap();
+    let mut kernel = Win32Kernel::builder(connector).build().unwrap();
 
     println!("{:?}", kernel);
+
+    kernel.process_info_list().unwrap().iter().for_each(|p| {
+        println!("{:?}", p);
+    });
 
     return Ok(());
 }
