@@ -8,10 +8,10 @@ inherit cargo
 # how to get zynq-memflow could be as easy as but default to a git checkout:
 # SRC_URI += "crate://crates.io/zynq-memflow/0.1.0"
 SRC_URI += "git://git@github.com/slack2450/zynq-memflow.git;protocol=ssh;nobranch=1"
-SRCREV = "7d8da05ccfd4211fecc2052f1865d46e96161282"
+SRCREV = "a4e38f79d0271dfc27ee072b46c754c9a0deff12"
 S = "${WORKDIR}/git"
 CARGO_SRC_DIR = ""
-PV:append = ".AUTOINC+7d8da05ccf"
+PV:append = ".AUTOINC+a4e38f79d0"
 
 # please note if you have entries that do not begin with crate://
 # you must change them to how that package can be fetched
@@ -171,10 +171,10 @@ SRC_URI += " \
 "
 
 SRCREV_FORMAT .= "_memflow-win32"
-SRCREV_memflow-win32 = "${AUTOREV}"
+SRCREV_memflow-win32 = "main"
 EXTRA_OECARGO_PATHS += "${WORKDIR}/memflow-win32"
 SRCREV_FORMAT .= "_memflow-win32-defs"
-SRCREV_memflow-win32-defs = "${AUTOREV}"
+SRCREV_memflow-win32-defs = "main"
 EXTRA_OECARGO_PATHS += "${WORKDIR}/memflow-win32-defs"
 
 # FIXME: update generateme with the real MD5 of the license file
