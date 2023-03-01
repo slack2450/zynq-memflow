@@ -8,10 +8,10 @@ inherit cargo
 # how to get zynq-memflow could be as easy as but default to a git checkout:
 # SRC_URI += "crate://crates.io/zynq-memflow/0.1.0"
 SRC_URI += "git://git@github.com/slack2450/zynq-memflow.git;protocol=ssh;nobranch=1"
-SRCREV = "a4e38f79d0271dfc27ee072b46c754c9a0deff12"
+SRCREV = "8af08ef79230972e9361ed44d357c2f22c262e9b"
 S = "${WORKDIR}/git"
 CARGO_SRC_DIR = ""
-PV:append = ".AUTOINC+a4e38f79d0"
+PV:append = ".AUTOINC+8af08ef792"
 
 # please note if you have entries that do not begin with crate://
 # you must change them to how that package can be fetched
@@ -39,8 +39,8 @@ SRC_URI += " \
     crate://crates.io/core_extensions/1.5.3 \
     crate://crates.io/core_extensions_proc_macros/1.5.3 \
     crate://crates.io/crc32fast/1.3.2 \
-    crate://crates.io/crossbeam-channel/0.5.6 \
-    crate://crates.io/crossbeam-utils/0.8.14 \
+    crate://crates.io/crossbeam-channel/0.5.7 \
+    crate://crates.io/crossbeam-utils/0.8.15 \
     crate://crates.io/darling/0.13.4 \
     crate://crates.io/darling_core/0.13.4 \
     crate://crates.io/darling_macro/0.13.4 \
@@ -61,7 +61,7 @@ SRC_URI += " \
     crate://crates.io/hashbrown/0.12.3 \
     crate://crates.io/ident_case/1.0.1 \
     crate://crates.io/idna/0.3.0 \
-    crate://crates.io/indicatif/0.17.3 \
+    crate://crates.io/indicatif/0.16.2 \
     crate://crates.io/instant/0.1.12 \
     crate://crates.io/itertools/0.10.5 \
     crate://crates.io/itoa/1.0.5 \
@@ -83,13 +83,11 @@ SRC_URI += " \
     crate://crates.io/parking_lot/0.11.2 \
     crate://crates.io/parking_lot_core/0.8.6 \
     crate://crates.io/paste/1.0.11 \
-    crate://crates.io/pdb/0.8.0 \
+    crate://crates.io/pdb/0.7.0 \
     crate://crates.io/pelite-macros/0.1.1 \
-    crate://crates.io/pelite/0.10.0 \
     crate://crates.io/pelite/0.9.0 \
     crate://crates.io/percent-encoding/2.2.0 \
     crate://crates.io/plain/0.2.3 \
-    crate://crates.io/portable-atomic/0.3.19 \
     crate://crates.io/proc-macro-crate/1.1.3 \
     crate://crates.io/proc-macro2/1.0.51 \
     crate://crates.io/progress-streams/1.1.0 \
@@ -99,7 +97,7 @@ SRC_URI += " \
     crate://crates.io/redox_users/0.4.3 \
     crate://crates.io/regex-syntax/0.6.28 \
     crate://crates.io/regex/1.7.1 \
-    crate://crates.io/repr_offset/0.2.1 \
+    crate://crates.io/repr_offset/0.2.2 \
     crate://crates.io/ring/0.16.20 \
     crate://crates.io/rustc_version/0.2.3 \
     crate://crates.io/rustc_version/0.4.0 \
@@ -107,6 +105,7 @@ SRC_URI += " \
     crate://crates.io/rustversion/1.0.11 \
     crate://crates.io/ryu/1.0.12 \
     crate://crates.io/scopeguard/1.1.0 \
+    crate://crates.io/scroll/0.10.2 \
     crate://crates.io/scroll/0.11.0 \
     crate://crates.io/scroll_derive/0.11.0 \
     crate://crates.io/sct/0.7.0 \
@@ -125,8 +124,8 @@ SRC_URI += " \
     crate://crates.io/thiserror-impl/1.0.38 \
     crate://crates.io/thiserror/1.0.38 \
     crate://crates.io/time-core/0.1.0 \
-    crate://crates.io/time-macros/0.2.7 \
-    crate://crates.io/time/0.3.19 \
+    crate://crates.io/time-macros/0.2.8 \
+    crate://crates.io/time/0.3.20 \
     crate://crates.io/tinyvec/1.6.0 \
     crate://crates.io/tinyvec_macros/0.1.1 \
     crate://crates.io/toml/0.5.11 \
@@ -136,11 +135,10 @@ SRC_URI += " \
     crate://crates.io/unicode-bidi/0.3.10 \
     crate://crates.io/unicode-ident/1.0.6 \
     crate://crates.io/unicode-normalization/0.1.22 \
-    crate://crates.io/unicode-width/0.1.10 \
     crate://crates.io/untrusted/0.7.1 \
     crate://crates.io/ureq/2.6.2 \
     crate://crates.io/url/2.3.1 \
-    crate://crates.io/uuid/1.3.0 \
+    crate://crates.io/uuid/0.8.2 \
     crate://crates.io/version_check/0.9.4 \
     crate://crates.io/volatile/0.4.6 \
     crate://crates.io/wasi/0.11.0+wasi-snapshot-preview1 \
@@ -152,7 +150,7 @@ SRC_URI += " \
     crate://crates.io/web-sys/0.3.58 \
     crate://crates.io/webpki-roots/0.22.6 \
     crate://crates.io/webpki/0.22.0 \
-    crate://crates.io/widestring/1.0.2 \
+    crate://crates.io/widestring/0.5.1 \
     crate://crates.io/winapi-i686-pc-windows-gnu/0.4.0 \
     crate://crates.io/winapi-util/0.1.5 \
     crate://crates.io/winapi-x86_64-pc-windows-gnu/0.4.0 \
@@ -171,10 +169,10 @@ SRC_URI += " \
 "
 
 SRCREV_FORMAT .= "_memflow-win32"
-SRCREV_memflow-win32 = "main"
+SRCREV_memflow-win32 = "0.2.0-beta9"
 EXTRA_OECARGO_PATHS += "${WORKDIR}/memflow-win32"
 SRCREV_FORMAT .= "_memflow-win32-defs"
-SRCREV_memflow-win32-defs = "main"
+SRCREV_memflow-win32-defs = "0.2.0-beta9"
 EXTRA_OECARGO_PATHS += "${WORKDIR}/memflow-win32-defs"
 
 # FIXME: update generateme with the real MD5 of the license file
