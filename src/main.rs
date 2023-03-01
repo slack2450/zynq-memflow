@@ -17,7 +17,7 @@ fn main() -> Result<()> {
     map.push_remap(0x0.into(), !0, 0x0.into());
     let connector = FileIoMemory::try_with_reader(file, map)?;
 
-    let kernel = Win32Kernel::builder(connector).no_symbol_store().build().unwrap();
+    let kernel = Win32Kernel::builder(connector).build().unwrap();
 
     println!("{:?}", kernel);
 
