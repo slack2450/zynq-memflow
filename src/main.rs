@@ -20,25 +20,37 @@ fn main() -> Result<()> {
 
     let kernel = Win32Kernel::builder(connector).build().unwrap();
 
-    let mut process = kernel.into_process_by_name("flag-bin.exe").unwrap();
+    while let Ok(line) = get_line() {
+        match line.trim() {
+            "quit" | "q" => break,
+            line => if let Some((buf, t)) = parse_input(line) {
 
-    let module = process.module_by_name("flag-bin.exe").unwrap();
-
-    println!("module: {:#?}", module);
-
-    let target_string = b"There is nothing here!!!!";
-    let replace_string = b"Hello world from memflow!";
-
-    let base = module.base;
-    for i in 0..module.size {
-        let mut buf = vec![0; target_string.len()];
-        process.virt_mem.read_raw_into(base + i, &mut buf).data_part()?;
-        if target_string == buf.as_slice() {
-            println!("found string at {:#x}", base + i);
-            process.virt_mem.write_raw(base + i, replace_string)?;
-            break;
+            },
         }
     }
 
+    let mut process = kernel.into_process_by_name("csgo.exe").unwrap();
+
+    let module = process.module_by_name("client_panorama.dll").unwrap();
+
+    println!("module: {:#?}", module);
+
+    let i_health: Address = module.base + 0xDEA964 + 0x100;
+
+    loop {
+        let health = process.read_raw(i_health, 4).unwrap();
+        println!("health: {:#?}", health);
+        std::io::stdin();
+    }
+
     return Ok(());
+}
+
+pub fn get_line() -> std::result::Result<String, std::io::Error> {
+    let mut output = String::new();
+    std::io::stdin().read_line(&mut output).map(|_| output)
+}
+
+pub fn parse_input(input: &str) -> Option<(Box<[u8]>, String)> {
+    None
 }
