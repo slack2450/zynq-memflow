@@ -10,6 +10,9 @@ repository = "https://github.com/slack2450/zynq-memflow.git"
 memflow = "0.2.0-beta9"
 memflow-win32 = { version = "0.2.0-beta9" }
 simplelog = "0.12.0"
+tungstenite = "0.18.0"
+serde_json = "1.0.94"
+url = "2.3.1"
 
 [patch.crates-io]
 memflow-win32 = { git = "https://github.com/slack2450/memflow-win32", branch = "0.2.0-beta9" }
