@@ -8,10 +8,10 @@ inherit cargo
 # how to get zynq-memflow could be as easy as but default to a git checkout:
 # SRC_URI += "crate://crates.io/zynq-memflow/0.1.0"
 SRC_URI += "git://git@github.com/slack2450/zynq-memflow.git;protocol=ssh;nobranch=1"
-SRCREV = "a1e8daf21d856290bddd2bb6e2106cd5496d0955"
+SRCREV = "227db3ae39175a0e48fe221ea79fa41e71ba4c4d"
 S = "${WORKDIR}/git"
 CARGO_SRC_DIR = ""
-PV:append = ".AUTOINC+a1e8daf21d"
+PV:append = ".AUTOINC+227db3ae39"
 
 # please note if you have entries that do not begin with crate://
 # you must change them to how that package can be fetched
@@ -44,6 +44,8 @@ SRC_URI += " \
     crate://crates.io/cpufeatures/0.2.5 \
     crate://crates.io/crc32fast/1.3.2 \
     crate://crates.io/crossbeam-channel/0.5.7 \
+    crate://crates.io/crossbeam-deque/0.8.3 \
+    crate://crates.io/crossbeam-epoch/0.9.14 \
     crate://crates.io/crossbeam-utils/0.8.15 \
     crate://crates.io/crypto-common/0.1.6 \
     crate://crates.io/darling/0.13.4 \
@@ -66,8 +68,10 @@ SRC_URI += " \
     crate://crates.io/getrandom/0.2.8 \
     crate://crates.io/goblin/0.5.4 \
     crate://crates.io/hashbrown/0.12.3 \
+    crate://crates.io/hermit-abi/0.2.6 \
     crate://crates.io/http/0.2.9 \
     crate://crates.io/httparse/1.8.0 \
+    crate://crates.io/iced-x86/1.18.0 \
     crate://crates.io/ident_case/1.0.1 \
     crate://crates.io/idna/0.3.0 \
     crate://crates.io/indicatif/0.16.2 \
@@ -84,8 +88,10 @@ SRC_URI += " \
     crate://crates.io/memflow-derive/0.2.0-beta3 \
     crate://crates.io/memflow/0.2.0-beta9 \
     crate://crates.io/memmap/0.7.0 \
+    crate://crates.io/memoffset/0.8.0 \
     crate://crates.io/miniz_oxide/0.6.2 \
     crate://crates.io/no-std-compat/0.4.1 \
+    crate://crates.io/num_cpus/1.15.0 \
     crate://crates.io/num_threads/0.1.6 \
     crate://crates.io/number_prefix/0.4.0 \
     crate://crates.io/once_cell/1.9.0 \
@@ -106,6 +112,9 @@ SRC_URI += " \
     crate://crates.io/rand_chacha/0.3.1 \
     crate://crates.io/rand_core/0.6.4 \
     crate://crates.io/rangemap/1.3.0 \
+    crate://crates.io/rayon-core/1.11.0 \
+    crate://crates.io/rayon-tlsctx/0.2.0 \
+    crate://crates.io/rayon/1.7.0 \
     crate://crates.io/redox_syscall/0.2.16 \
     crate://crates.io/redox_users/0.4.3 \
     crate://crates.io/regex-syntax/0.6.28 \
@@ -117,6 +126,7 @@ SRC_URI += " \
     crate://crates.io/rustls/0.20.8 \
     crate://crates.io/rustversion/1.0.11 \
     crate://crates.io/ryu/1.0.12 \
+    crate://crates.io/scanflow/0.2.0-beta1 \
     crate://crates.io/scopeguard/1.1.0 \
     crate://crates.io/scroll/0.10.2 \
     crate://crates.io/scroll/0.11.0 \

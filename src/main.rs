@@ -52,7 +52,6 @@ fn main() -> Result<()> {
             let msg = msg.to_text().unwrap();
             let msg: serde_json::Value = serde_json::from_str(msg).unwrap();
             if msg["action"].is_string() {
-                //let action: String = .into();
                 match msg["action"].as_str().unwrap() {
                     "process-info-list" => {
                         let response: WebsocketResponse<ProcessInfo> = WebsocketResponse {
@@ -102,9 +101,20 @@ fn main() -> Result<()> {
                     },
                     "search" => {
                         if let Some(ref mut process) = process_option {
-                            let data: &[u8] = &msg["data"].as_u64().unwrap().to_le_bytes();
-                            println!("searching for {:#?}", data);
-                            scanner.scan_for(process, data).unwrap();
+                            if let Some(data) = parse_input(msg["value"].as_str().unwrap(), msg["type"].as_str().unwrap()) {
+                                println!("searching for {:#?} of type {:#?}", msg["value"], msg["type"]);
+                                scanner.scan_for(process, &data).unwrap();
+                                let response: WebsocketResponse<Address> = WebsocketResponse {
+                                    action: "search-result".to_string(),
+                                    success: true,
+                                    data: Some(scanner.matches().to_vec()),
+                                    error: None
+                                };
+                                let info = serde_json::to_string(&response).unwrap();
+                                socket.write_message(tungstenite::Message::Text(info)).unwrap();
+                            } else {
+                                println!("unknown type: {:#?}", msg["type"].as_str().unwrap());
+                            }
                         }
                     },
                     _ => {
@@ -153,4 +163,121 @@ fn main() -> Result<()> {
     }*/
 
     return Ok(());
+}
+
+// Stolen shamelessly from scanflow
+
+type PrintFn = fn(&[u8]) -> Option<String>;
+type ParseFn = fn(&str) -> Option<Box<[u8]>>;
+pub struct Type(&'static str, Option<usize>, PrintFn, ParseFn);
+
+const TYPES: &[Type] = &[
+    Type(
+        "str",
+        None,
+        |buf| Some(String::from_utf8_lossy(buf).to_string()),
+        |value| Some(Box::from(value.as_bytes())),
+    ),
+    Type(
+        "str_utf16",
+        None,
+        |buf| {
+            let mut vec = vec![];
+            for w in buf.chunks_exact(2) {
+                let s = u16::from_ne_bytes(w.try_into().unwrap());
+                vec.push(s);
+            }
+            Some(format!("{}", String::from_utf16_lossy(&vec)))
+        },
+        |value| {
+            let mut out = vec![];
+            for v in value.encode_utf16() {
+                out.extend(v.to_ne_bytes().iter().copied());
+            }
+            Some(out.into_boxed_slice())
+        },
+    ),
+    Type(
+        "i128",
+        Some(16),
+        |buf| Some(format!("{}", i128::from_ne_bytes(buf.try_into().ok()?))),
+        |value| Some(Box::from(value.parse::<i128>().ok()?.to_ne_bytes())),
+    ),
+    Type(
+        "i64",
+        Some(8),
+        |buf| Some(format!("{}", i64::from_ne_bytes(buf.try_into().ok()?))),
+        |value| Some(Box::from(value.parse::<i64>().ok()?.to_ne_bytes())),
+    ),
+    Type(
+        "i32",
+        Some(4),
+        |buf| Some(format!("{}", i32::from_ne_bytes(buf.try_into().ok()?))),
+        |value| Some(Box::from(value.parse::<i32>().ok()?.to_ne_bytes())),
+    ),
+    Type(
+        "i16",
+        Some(2),
+        |buf| Some(format!("{}", i16::from_ne_bytes(buf.try_into().ok()?))),
+        |value| Some(Box::from(value.parse::<i16>().ok()?.to_ne_bytes())),
+    ),
+    Type(
+        "i8",
+        Some(1),
+        |buf| Some(format!("{}", i8::from_ne_bytes(buf.try_into().ok()?))),
+        |value| Some(Box::from(value.parse::<i8>().ok()?.to_ne_bytes())),
+    ),
+    Type(
+        "u128",
+        Some(16),
+        |buf| Some(format!("{}", u128::from_ne_bytes(buf.try_into().ok()?))),
+        |value| Some(Box::from(value.parse::<u128>().ok()?.to_ne_bytes())),
+    ),
+    Type(
+        "u64",
+        Some(8),
+        |buf| Some(format!("{}", u64::from_ne_bytes(buf.try_into().ok()?))),
+        |value| Some(Box::from(value.parse::<u64>().ok()?.to_ne_bytes())),
+    ),
+    Type(
+        "u32",
+        Some(4),
+        |buf| Some(format!("{}", u32::from_ne_bytes(buf.try_into().ok()?))),
+        |value| Some(Box::from(value.parse::<u32>().ok()?.to_ne_bytes())),
+    ),
+    Type(
+        "u16",
+        Some(2),
+        |buf| Some(format!("{}", u16::from_ne_bytes(buf.try_into().ok()?))),
+        |value| Some(Box::from(value.parse::<u16>().ok()?.to_ne_bytes())),
+    ),
+    Type(
+        "u8",
+        Some(1),
+        |buf| Some(format!("{}", u8::from_ne_bytes(buf.try_into().ok()?))),
+        |value| Some(Box::from(value.parse::<u8>().ok()?.to_ne_bytes())),
+    ),
+    Type(
+        "f64",
+        Some(4),
+        |buf| Some(format!("{}", f64::from_ne_bytes(buf.try_into().ok()?))),
+        |value| Some(Box::from(value.parse::<f64>().ok()?.to_ne_bytes())),
+    ),
+    Type(
+        "f32",
+        Some(4),
+        |buf| Some(format!("{}", f32::from_ne_bytes(buf.try_into().ok()?))),
+        |value| Some(Box::from(value.parse::<f32>().ok()?.to_ne_bytes())),
+    ),
+];
+
+pub fn parse_input(input: &str, typename: &str) -> Option<Box<[u8]>> {
+
+    let b =  TYPES
+        .iter()
+        .filter(|Type(name, _, _, _)| name == &typename)
+        .next()?
+        .3(input)?;
+
+    Some(b)
 }
