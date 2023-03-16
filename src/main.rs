@@ -4,11 +4,22 @@ use memflow::prelude::v1::*;
 use memflow::{prelude::{v1::{Result}, CloneFile}};
 use memflow::mem::MemoryMap;
 use memflow::connector::FileIoMemory;
-use memflow_win32::win32::Win32Kernel;
+use memflow_win32::win32::{Win32Kernel, Win32VirtualTranslate, Win32Process};
 
+use serde::Serialize;
 use simplelog::{LevelFilter, TermLogger, Config, TerminalMode };
 
 use url::Url;
+
+use scanflow::value_scanner::ValueScanner;
+
+#[derive(Serialize)]
+pub struct WebsocketResponse<T> {
+    pub action: String,
+    pub success: bool,
+    pub data: Option<Vec<T>>,
+    pub error: Option<String>
+}
 
 fn main() -> Result<()> {
     TermLogger::init(LevelFilter::Debug, Config::default(), TerminalMode::Mixed, simplelog::ColorChoice::Auto).unwrap();
@@ -26,6 +37,10 @@ fn main() -> Result<()> {
 
     let (mut socket, _response) = tungstenite::connect(url).unwrap();
 
+    let mut scanner = ValueScanner::default();
+
+    let mut process_option: Option<Win32Process<FileIoMemory<CloneFile>, DirectTranslate, Win32VirtualTranslate>> = None;
+
     loop {
         if !socket.can_read() {
             continue;
@@ -40,9 +55,57 @@ fn main() -> Result<()> {
                 //let action: String = .into();
                 match msg["action"].as_str().unwrap() {
                     "process-info-list" => {
-                        let process_info_list = kernel.process_info_list().unwrap();
-                        let info = serde_json::to_string(&process_info_list).unwrap();
+                        let response: WebsocketResponse<ProcessInfo> = WebsocketResponse {
+                            action: "process-info-list".to_string(),
+                            success: true,
+                            data: Some(kernel.process_info_list().unwrap()),
+                            error: None
+                        };
+                        let info = serde_json::to_string(&response).unwrap();
                         socket.write_message(tungstenite::Message::Text(info)).unwrap();
+                    },
+                    "attach-process" => {
+                        process_option = Some(kernel.clone().into_process_by_name(msg["name"].as_str().unwrap()).unwrap());
+                        let response: WebsocketResponse<bool> = WebsocketResponse {
+                            action: "attach-process".to_string(),
+                            success: true,
+                            data: None,
+                            error: None
+                        };
+                        let info = serde_json::to_string(&response).unwrap();
+                        socket.write_message(tungstenite::Message::Text(info)).unwrap();
+                    },
+                    "module-list" => {
+                        if let Some(ref mut process) = process_option {
+                            let respose: WebsocketResponse<ModuleInfo> = WebsocketResponse {
+                                action: "module-info".to_string(),
+                                success: true,
+                                data: Some(process.module_list().unwrap()),
+                                error: None
+                            };
+                            let info = serde_json::to_string(&respose).unwrap();
+                            socket.write_message(tungstenite::Message::Text(info)).unwrap();
+                        } else {
+                            let respose: WebsocketResponse<ModuleInfo> = WebsocketResponse {
+                                action: "module-info".to_string(),
+                                success: false,
+                                data: None,
+                                error: Some("no process attached".to_string())
+                            };
+                            let info = serde_json::to_string(&respose).unwrap();
+                            socket.write_message(tungstenite::Message::Text(info)).unwrap();
+                        }
+                    },
+                    "reset" => {
+                        scanner.reset();
+                        process_option = None;
+                    },
+                    "search" => {
+                        if let Some(ref mut process) = process_option {
+                            let data: &[u8] = &msg["data"].as_u64().unwrap().to_le_bytes();
+                            println!("searching for {:#?}", data);
+                            scanner.scan_for(process, data).unwrap();
+                        }
                     },
                     _ => {
                         println!("unknown action: {:#?}", msg["action"].as_str().unwrap());

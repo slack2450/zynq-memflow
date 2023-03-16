@@ -9,8 +9,10 @@ repository = "https://github.com/slack2450/zynq-memflow.git"
 [dependencies]
 memflow = "0.2.0-beta9"
 memflow-win32 = { version = "0.2.0-beta9" }
+scanflow = "0.2.0-beta1"
 simplelog = "0.12.0"
 tungstenite = "0.18.0"
+serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0.94"
 url = "2.3.1"
 
