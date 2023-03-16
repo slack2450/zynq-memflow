@@ -8,10 +8,10 @@ inherit cargo
 # how to get zynq-memflow could be as easy as but default to a git checkout:
 # SRC_URI += "crate://crates.io/zynq-memflow/0.1.0"
 SRC_URI += "git://git@github.com/slack2450/zynq-memflow.git;protocol=ssh;nobranch=1"
-SRCREV = "d2a60e73d6140e9159a2d592db21fa506e73d62d"
+SRCREV = "1406e2de9effe32eb6bd99e2212fea3a8a07b86d"
 S = "${WORKDIR}/git"
 CARGO_SRC_DIR = ""
-PV:append = ".AUTOINC+d2a60e73d6"
+PV:append = ".AUTOINC+1406e2de9e"
 
 # please note if you have entries that do not begin with crate://
 # you must change them to how that package can be fetched
@@ -27,7 +27,10 @@ SRC_URI += " \
     crate://crates.io/base64/0.13.1 \
     crate://crates.io/bit_field/0.10.2 \
     crate://crates.io/bitflags/1.3.2 \
+    crate://crates.io/block-buffer/0.10.4 \
     crate://crates.io/bumpalo/3.12.0 \
+    crate://crates.io/byteorder/1.4.3 \
+    crate://crates.io/bytes/1.4.0 \
     crate://crates.io/cc/1.0.79 \
     crate://crates.io/cfg-if/0.1.10 \
     crate://crates.io/cfg-if/1.0.0 \
@@ -38,14 +41,17 @@ SRC_URI += " \
     crate://crates.io/console/0.15.5 \
     crate://crates.io/core_extensions/1.5.3 \
     crate://crates.io/core_extensions_proc_macros/1.5.3 \
+    crate://crates.io/cpufeatures/0.2.5 \
     crate://crates.io/crc32fast/1.3.2 \
     crate://crates.io/crossbeam-channel/0.5.7 \
     crate://crates.io/crossbeam-utils/0.8.15 \
+    crate://crates.io/crypto-common/0.1.6 \
     crate://crates.io/darling/0.13.4 \
     crate://crates.io/darling_core/0.13.4 \
     crate://crates.io/darling_macro/0.13.4 \
     crate://crates.io/dataview/0.1.2 \
     crate://crates.io/dataview/1.0.1 \
+    crate://crates.io/digest/0.10.6 \
     crate://crates.io/dirs-sys/0.3.7 \
     crate://crates.io/dirs/4.0.0 \
     crate://crates.io/either/1.8.1 \
@@ -56,9 +62,12 @@ SRC_URI += " \
     crate://crates.io/fnv/1.0.7 \
     crate://crates.io/form_urlencoded/1.1.0 \
     crate://crates.io/generational-arena/0.2.8 \
+    crate://crates.io/generic-array/0.14.6 \
     crate://crates.io/getrandom/0.2.8 \
     crate://crates.io/goblin/0.5.4 \
     crate://crates.io/hashbrown/0.12.3 \
+    crate://crates.io/http/0.2.9 \
+    crate://crates.io/httparse/1.8.0 \
     crate://crates.io/ident_case/1.0.1 \
     crate://crates.io/idna/0.3.0 \
     crate://crates.io/indicatif/0.16.2 \
@@ -88,10 +97,14 @@ SRC_URI += " \
     crate://crates.io/pelite/0.9.0 \
     crate://crates.io/percent-encoding/2.2.0 \
     crate://crates.io/plain/0.2.3 \
+    crate://crates.io/ppv-lite86/0.2.17 \
     crate://crates.io/proc-macro-crate/1.1.3 \
     crate://crates.io/proc-macro2/1.0.51 \
     crate://crates.io/progress-streams/1.1.0 \
     crate://crates.io/quote/1.0.23 \
+    crate://crates.io/rand/0.8.5 \
+    crate://crates.io/rand_chacha/0.3.1 \
+    crate://crates.io/rand_core/0.6.4 \
     crate://crates.io/rangemap/1.3.0 \
     crate://crates.io/redox_syscall/0.2.16 \
     crate://crates.io/redox_users/0.4.3 \
@@ -114,7 +127,8 @@ SRC_URI += " \
     crate://crates.io/semver/1.0.16 \
     crate://crates.io/serde/1.0.152 \
     crate://crates.io/serde_derive/1.0.152 \
-    crate://crates.io/serde_json/1.0.93 \
+    crate://crates.io/serde_json/1.0.94 \
+    crate://crates.io/sha1/0.10.5 \
     crate://crates.io/simplelog/0.12.0 \
     crate://crates.io/smallvec/1.10.0 \
     crate://crates.io/spin/0.5.2 \
@@ -131,13 +145,16 @@ SRC_URI += " \
     crate://crates.io/toml/0.5.11 \
     crate://crates.io/tstr/0.2.3 \
     crate://crates.io/tstr_proc_macros/0.2.2 \
+    crate://crates.io/tungstenite/0.18.0 \
     crate://crates.io/typed-arena/2.0.2 \
+    crate://crates.io/typenum/1.16.0 \
     crate://crates.io/unicode-bidi/0.3.10 \
     crate://crates.io/unicode-ident/1.0.6 \
     crate://crates.io/unicode-normalization/0.1.22 \
     crate://crates.io/untrusted/0.7.1 \
     crate://crates.io/ureq/2.6.2 \
     crate://crates.io/url/2.3.1 \
+    crate://crates.io/utf-8/0.7.6 \
     crate://crates.io/uuid/0.8.2 \
     crate://crates.io/version_check/0.9.4 \
     crate://crates.io/volatile/0.4.6 \

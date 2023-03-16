@@ -22,36 +22,39 @@ fn main() -> Result<()> {
 
     let mut kernel = Win32Kernel::builder(connector).build().unwrap();
 
-    let url = Url::parse("ws://192.168.0.13:9001/device").unwrap();
+    let url = Url::parse("ws://192.168.0.13:9001/device/device-1").unwrap();
 
     let (mut socket, _response) = tungstenite::connect(url).unwrap();
 
     loop {
+        if !socket.can_read() {
+            continue;
+        }
+
         let msg = socket.read_message().unwrap();
 
-        let msg = match msg {
-            tungstenite::Message::Text(text) => text,
-            _ => panic!("unexpected message"),
-        };
+        if msg.is_text() {
+            let msg = msg.to_text().unwrap();
+            let msg: serde_json::Value = serde_json::from_str(msg).unwrap();
+            if msg["action"].is_string() {
+                let action = msg["action"].to_string();
+                match action.as_str() {
+                    "process-info-list" => {
+                        let process_info_list = kernel.process_info_list().unwrap();
+                        let info = serde_json::to_string(&process_info_list).unwrap();
+                        socket.write_message(tungstenite::Message::Text(info)).unwrap();
+                    },
+                    _ => {
+                        println!("unknown action: {:#?}", msg["action"]);
+                    }
+                }
+            }
+        }
 
-        let parsed: serde_json::Value = serde_json::from_str(&msg).unwrap();
-
-        if parsed["action"] == "process-list" {
-            let process_info_list = kernel.process_info_list().unwrap();
-
-            let info = serde_json::to_string(&process_info_list).unwrap();
-
-            socket.write_message(tungstenite::Message::Text(info)).unwrap();
-        } else {
-            println!("unknown action: {:#?}", parsed["action"]);
+        if msg.is_close() {
+            break;
         }
     }
-
-    //let message = client.recv_message().unwrap();
-
-    //let json = serde_json::from_str(message.try_into().unwrap()).unwrap();
-
-
 
     //let mut process = kernel.into_process_by_name("csgo.exe").unwrap();
 
