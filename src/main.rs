@@ -37,15 +37,15 @@ fn main() -> Result<()> {
             let msg = msg.to_text().unwrap();
             let msg: serde_json::Value = serde_json::from_str(msg).unwrap();
             if msg["action"].is_string() {
-                let action = msg["action"].to_string();
-                match action.as_str() {
+                //let action: String = .into();
+                match msg["action"].as_str().unwrap() {
                     "process-info-list" => {
                         let process_info_list = kernel.process_info_list().unwrap();
                         let info = serde_json::to_string(&process_info_list).unwrap();
                         socket.write_message(tungstenite::Message::Text(info)).unwrap();
                     },
                     _ => {
-                        println!("unknown action: {:#?}", msg["action"]);
+                        println!("unknown action: {:#?}", msg["action"].as_str().unwrap());
                     }
                 }
             }
